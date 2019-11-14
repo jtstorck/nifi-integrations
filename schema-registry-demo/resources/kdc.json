@@ -1,0 +1,16 @@
+{
+  "principals": [
+    {
+      "id": "user@EXAMPLE.COM",
+      "password": "user"
+    },
+    {
+      "id": "HTTP/schema-registry@CFM.COM",
+      "password": "http"
+    }
+  ],
+  "domain": "schema-registry",
+  "realm": "EXAMPLE.COM",
+  "ip": "127.0.0.1",
+  "port": 48088
+}

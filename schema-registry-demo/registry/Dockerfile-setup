@@ -1,0 +1,8 @@
+FROM openjdk:8-jdk-alpine
+RUN apk --no-cache add curl
+WORKDIR /tmp
+RUN curl -LO https://github.com/hortonworks/registry/releases/download/v0.8.1-rc1/hortonworks-registry-0.8.1.tar.gz
+WORKDIR /schema-registry
+RUN tar zxf /tmp/hortonworks-registry-0.8.1.tar.gz -C . --strip-components 1
+ADD resources/registry-dev-kerberos.yaml /schema-registry/conf/registry-dev-kerberos.yaml
+ENTRYPOINT ["echo", "Schema Registry has been configured"]
