@@ -5,16 +5,15 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 cd $SCRIPT_DIR || return
 
-# make directory for mounting in containers to share keytabs
-mkdir -p ../work/keytabs
-
-git clone https://github.com/tillt/docker-kdc ../work/docker-kdc
+git clone https://github.com/jtstorck/docker-kdc ../work/docker-kdc
 cd ../work/docker-kdc || return
-git fetch origin pull/10/head:docker-kdc-mac
-git checkout docker-kdc-mac
+git checkout specify-network
 
 
 KDC_CONFIG=$SCRIPT_DIR/../resources/kdc.json
+KDC_NETWORK=schema-registry-network
+
+docker network create schema-registry-network
 
 ./kdc build
 

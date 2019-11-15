@@ -1,2 +1,5 @@
 */work/
 .idea
+
+# krb5.conf is generated and should not be version controlled
+/schema-registry-demo/registry/resources/krb5.conf

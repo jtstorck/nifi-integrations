@@ -5,4 +5,5 @@ RUN curl -LO https://github.com/hortonworks/registry/releases/download/v0.8.1-rc
 WORKDIR /schema-registry
 RUN tar zxf /tmp/hortonworks-registry-0.8.1.tar.gz -C . --strip-components 1
 ADD resources/registry-dev-kerberos.yaml /schema-registry/conf/registry-dev-kerberos.yaml
+ADD resources/krb5.conf /etc/krb5.conf
 ENTRYPOINT ["echo", "Schema Registry has been configured"]

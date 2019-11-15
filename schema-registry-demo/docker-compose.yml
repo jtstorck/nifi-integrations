@@ -1,14 +1,14 @@
 version: '3.7'
 
 services:
-
-  docker-kdc:
-    build: docker-kdc
-    image: docker-kdc-sr-demo
-    volumes:
-      - ./work/keytabs:/keytabs:rw
-    networks:
-      - schema-registry-network
+#
+#  docker-kdc:
+#    build: docker-kdc
+#    image: docker-kdc-sr-demo
+#    volumes:
+#      - schema-registry-shared:/etc/docker-kdc
+#    networks:
+#      - schema-registry-network
 
   schema-registry-setup:
     build:
@@ -17,20 +17,26 @@ services:
     image: schema-registry-sr-demo
     networks:
       - schema-registry-network
-    depends_on:
-      - docker-kdc
+#    depends_on:
+#      - docker-kdc
 
   schema-registry:
     build:
       context: ./registry
       dockerfile: Dockerfile
+      network: host
+    ports:
+      - 9090-9091:9090-9091
     volumes:
       - ./work/keytabs:/keytabs:ro
     networks:
       - schema-registry-network
     depends_on:
       - schema-registry-setup
-      - docker-kdc
+
+#volumes:
+#  schema-registry-shared:
 
 networks:
   schema-registry-network:
+    external: true
