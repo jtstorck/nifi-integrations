@@ -8,4 +8,4 @@ docker-compose -f $SCRIPT_DIR/../docker-compose.yml down
 # stop docker-kdc
 source $SCRIPT_DIR/../work/docker-kdc/kdc stop
 
-docker network rm schema-registry-network
+docker network rm schema-registry-demo-network

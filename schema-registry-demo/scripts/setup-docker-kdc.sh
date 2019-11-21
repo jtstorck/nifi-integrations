@@ -9,11 +9,8 @@ git clone https://github.com/jtstorck/docker-kdc ../work/docker-kdc
 cd ../work/docker-kdc || return
 git checkout specify-network
 
-
-KDC_CONFIG=$SCRIPT_DIR/../resources/kdc.json
-KDC_NETWORK=schema-registry-network
-
-docker network create schema-registry-network
+cp ${SCRIPT_DIR}/../resources/kdc.json ${SCRIPT_DIR}/../work/docker-kdc/kdc.json
+KDC_NETWORK=schema-registry-demo-network
 
 ./kdc build
 

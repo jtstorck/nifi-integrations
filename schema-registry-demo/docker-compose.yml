@@ -1,42 +1,84 @@
 version: '3.7'
 
 services:
-#
-#  docker-kdc:
-#    build: docker-kdc
-#    image: docker-kdc-sr-demo
-#    volumes:
-#      - schema-registry-shared:/etc/docker-kdc
-#    networks:
-#      - schema-registry-network
 
   schema-registry-setup:
     build:
-      context: ./registry
-      dockerfile: Dockerfile-setup
-    image: schema-registry-sr-demo
+      context: ./registry/setup
+      dockerfile: Dockerfile
+    image: schema-registry-setup-sr-demo
     networks:
-      - schema-registry-network
-#    depends_on:
-#      - docker-kdc
+      - schema-registry-demo-network
+    labels:
+      - "traefik.enable=false"
 
   schema-registry:
     build:
       context: ./registry
       dockerfile: Dockerfile
-      network: host
+    image: schema-registry-sr-demo
     ports:
       - 9090-9091:9090-9091
     volumes:
-      - ./work/keytabs:/keytabs:ro
+      - ./work/resources:/demo-resources:ro
     networks:
-      - schema-registry-network
+      schema-registry-demo-network:
+        aliases:
+          - schema-registry.schema-registry-demo
     depends_on:
       - schema-registry-setup
+    labels:
+      - "traefik.http.routers.schema-registry.rule=Host(`schema-registry.schema-registry-demo`)"
 
-#volumes:
-#  schema-registry-shared:
+  nifi:
+    build:
+      context: ./nifi
+      dockerfile: Dockerfile
+    image: nifi-sr-demo
+    ports:
+      - 8080:8080 # UI
+      - 10000:10000 # Site-to-Site Input Port
+    volumes:
+      - ./work/resources:/demo-resources:ro
+    networks:
+      schema-registry-demo-network:
+        aliases:
+          - nifi.schema-registry-demo
+    labels:
+      - "traefik.http.routers.nifi.rule=Host(`nifi.schema-registry-demo`)"
+      - "traefik.http.services.nifi.loadbalancer.server.port=8080"
+
+#  traefik:
+#    image: traefik:v2.0
+#    # Enables the web UI and tells Traefik to listen to docker
+#    command:
+#      - --api.insecure=true
+#      - --providers.docker
+#      - --entrypoints.web.address=:80
+#    ports:
+#      # The HTTP port
+#      - 80:80
+#      # The Web UI (enabled by --api.insecure=true)
+#      - 8180:8080
+#    volumes:
+#      # So that Traefik can listen to the Docker events
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+##    networks:
+##      - schema-registry-demo-network
+#
+#  whoami:
+#    image: "containous/whoami"
+#    container_name: "simple-service"
+#    labels:
+##      - "traefik.enable=true"
+#      - "traefik.http.routers.whoami.rule=Host(`whoami.docker.localhost`)"
+#      - "traefik.http.routers.whoami.entrypoints=web"
+##      - "traefik.docker.network=schema-registry-demo-network"
+#    networks:
+#      schema-registry-demo-network:
+#        aliases:
+#          - whoami.schema-registry-demo
 
 networks:
-  schema-registry-network:
+  schema-registry-demo-network:
     external: true

@@ -23,8 +23,8 @@ servletFilters:
   - className: "com.hortonworks.registries.auth.server.AuthenticationFilter"
     params:
       type: "kerberos"
-      kerberos.principal: "HTTP/schema-registry@EXAMPLE.COM"
-      kerberos.keytab: "/keytabs/schema-registry.keytab"
+      kerberos.principal: "HTTP/schema-registry.schema-registry-demo@EXAMPLE.COM"
+      kerberos.keytab: "/demo-resources/schema-registry.keytab"
       kerberos.name.rules: "RULE:[2:$1@$0]([jt]t@.*EXAMPLE.COM)s/.*/$MAPRED_USER/ RULE:[2:$1@$0]([nd]n@.*EXAMPLE.COM)s/.*/$HDFS_USER/DEFAULT"
       allowed.resources: "401.html,back-default.png,favicon.ico"
   #Note that it is highly recommended to force ssl connections if you are using the jwt handler config below. Unsecured connections will expose jwt

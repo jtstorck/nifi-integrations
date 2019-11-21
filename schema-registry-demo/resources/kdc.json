@@ -5,11 +5,11 @@
       "password": "user"
     },
     {
-      "id": "HTTP/schema-registry@CFM.COM",
+      "id": "HTTP/schema-registry.schema-registry-demo@EXAMPLE.COM",
       "password": "http"
     }
   ],
-  "domain": "schema-registry",
+  "domain": "schema-registry-demo",
   "realm": "EXAMPLE.COM",
   "ip": "127.0.0.1",
   "port": 48088
